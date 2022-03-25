@@ -44,7 +44,7 @@
         "node": ">=16.13.0"
     },
     "dependencies": {
-        "ether.js": "^1.0.0",
-        "ethers": "^5.6.1"
+        "ethers": "^5.6.1",
+        "node-fetch": "^3.2.3"
     }
 }
