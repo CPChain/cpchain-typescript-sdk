@@ -13,6 +13,9 @@ API:
   + [ ] createJsonRPCProvider
 + [ ] Wallet
 + [ ] Signer
++ [ ] Contracts
++ [ ] Events
++ [ ] Utils
 
 ## Ethers API
 
