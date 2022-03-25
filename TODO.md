@@ -1,5 +1,21 @@
 # TODO
 
+## CPChain API
+
+Differce between ethereum and cpchain:
+
++ Path (ChainID)
++ The additional `type` field in CPChain transactions
+
+API:
+
++ [ ] Providers
+  + [ ] createJsonRPCProvider
++ [ ] Wallet
++ [ ] Signer
+
+## Ethers API
+
 + [ ] Providers
   + [ ] Provider
     + [ ] Accounts Methods
