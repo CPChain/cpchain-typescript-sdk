@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    /* Visit https://aka.ms/tsconfig.json to read more about this file */
+
+    "outDir": "./lib",
+    "rootDir": "./src",
+    "target": "es5",
+    "module": "es6",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "allowJs": true
+  },
+  "include": ["src/**/*", "test/hello.spec.ts"],
+  "exclude": ["node_modules"]
+}
