@@ -13,6 +13,6 @@
     "moduleResolution": "node",
     "allowJs": true
   },
-  "include": ["src/**/*", "test/hello.spec.ts"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules"]
 }
