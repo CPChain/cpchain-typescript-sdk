@@ -1,15 +1,15 @@
 import { ethers } from 'ethers'
-import { getAddress } from '@ethersproject/address'
-import { resolveProperties } from '@ethersproject/properties'
-import { Logger } from '@ethersproject/logger'
 import { serializeCPC, UnsignedCPCTransaction, TransactionRequest } from './tx'
 import { version } from '../_vertion'
-import { keccak256 } from '@ethersproject/keccak256'
-const logger = new Logger(version)
+const logger = new ethers.utils.Logger(version)
+
+const getAddress = ethers.utils.getAddress
+const resolveProperties = ethers.utils.resolveProperties
+const keccak256 = ethers.utils.keccak256
 
 export const defaultPath = "m/44'/337'/0'/0/0"
 
-class CPCWallet {
+export class CPCWallet {
   private wallet: ethers.Wallet
 
   constructor (wallet: ethers.Wallet) {

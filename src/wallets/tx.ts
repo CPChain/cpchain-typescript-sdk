@@ -1,10 +1,15 @@
 import { ethers } from 'ethers'
-import { arrayify, DataOptions, hexlify, isBytesLike, SignatureLike, splitSignature, stripZeros } from '@ethersproject/bytes'
-import { checkProperties } from '@ethersproject/properties'
-import * as RLP from '@ethersproject/rlp'
-import { Logger } from '@ethersproject/logger'
+import { DataOptions, SignatureLike } from '@ethersproject/bytes'
 import { version } from '../_vertion'
-const logger = new Logger(version)
+const logger = new ethers.utils.Logger(version)
+
+const arrayify = ethers.utils.arrayify
+const hexlify = ethers.utils.hexlify
+const isBytesLike = ethers.utils.isBytesLike
+const splitSignature = ethers.utils.splitSignature
+const stripZeros = ethers.utils.stripZeros
+const checkProperties = ethers.utils.checkProperties
+const RLP = ethers.utils.RLP
 
 export type TransactionRequest = {
   to?: string,
@@ -136,7 +141,7 @@ export function serializeCPC (transaction: UnsignedCPCTransaction, signature?: S
       break
   }
 
-  return logger.throwError(`unsupported transaction type: ${transaction.type}`, Logger.errors.UNSUPPORTED_OPERATION, {
+  return logger.throwError(`unsupported transaction type: ${transaction.type}`, ethers.utils.Logger.errors.UNSUPPORTED_OPERATION, {
     operation: 'serializeTransaction',
     transactionType: transaction.type
   })

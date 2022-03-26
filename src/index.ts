@@ -1,8 +1,9 @@
+import * as providers from './providers'
+import wallets from './wallets'
+import utils from './utils'
 
-/**
- * just a example
- * @return {string} a example
- */
-export function hello () : String {
-  return 'Hello World'
+export default {
+  providers,
+  wallets,
+  utils
 }

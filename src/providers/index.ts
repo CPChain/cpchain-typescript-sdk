@@ -1,5 +1,5 @@
 import { ethers } from 'ethers'
-import fetch from 'node-fetch'
+import fetch from 'cross-fetch'
 
 class CPCTransactionResponse implements ethers.providers.TransactionResponse {
   hash: string
@@ -53,12 +53,37 @@ interface RPCError {
   }
 }
 
+const networks = [
+  {
+    name: 'Mainnet',
+    chainId: 337,
+    ensAddress: 'https://civilian.cpchain.io'
+  }, {
+    name: 'Testnet',
+    chainId: 41,
+    ensAddress: 'https://testnet.civilian.cpchain.io'
+  }
+]
+
 class CPCJsonRpcProvider extends ethers.providers.JsonRpcProvider {
   private _url: string
 
   constructor (url: string, network?: ethers.providers.Networkish) {
     super(url, network)
     this._url = url
+  }
+
+  detectNetwork (): Promise<ethers.providers.Network> {
+    return this.getNetwork()
+  }
+
+  getNetwork (): Promise<ethers.providers.Network> {
+    const network = networks.find(network => network.ensAddress === this._url) || {
+      name: 'Unknown',
+      chainId: 0,
+      ensAddress: this._url
+    }
+    return Promise.resolve(network)
   }
 
   sendTransaction (signedTransaction: string | Promise<string>): Promise<ethers.providers.TransactionResponse> {
