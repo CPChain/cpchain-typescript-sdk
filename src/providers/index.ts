@@ -80,7 +80,7 @@ class CPCJsonRpcProvider extends ethers.providers.JsonRpcProvider {
   getNetwork (): Promise<ethers.providers.Network> {
     const network = networks.find(network => network.ensAddress === this._url) || {
       name: 'Unknown',
-      chainId: 0,
+      chainId: this._network && this._network.chainId,
       ensAddress: this._url
     }
     return Promise.resolve(network)
@@ -102,7 +102,7 @@ class CPCJsonRpcProvider extends ethers.providers.JsonRpcProvider {
 }
 
 function createJsonRpcProvider (url: string = 'https://civilian.cpchain.io', chainID: number = 337): CPCJsonRpcProvider {
-  return new CPCJsonRpcProvider(url)
+  return new CPCJsonRpcProvider(url, chainID)
 }
 
 export {
