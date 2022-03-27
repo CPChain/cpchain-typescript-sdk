@@ -101,7 +101,7 @@ class CPCJsonRpcProvider extends ethers.providers.JsonRpcProvider {
   }
 }
 
-function createJsonRpcProvider (url: string = 'https://civilian.cpchain.io'): CPCJsonRpcProvider {
+function createJsonRpcProvider (url: string = 'https://civilian.cpchain.io', chainID: number = 337): CPCJsonRpcProvider {
   return new CPCJsonRpcProvider(url)
 }
 

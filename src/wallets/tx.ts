@@ -11,7 +11,7 @@ const stripZeros = ethers.utils.stripZeros
 const checkProperties = ethers.utils.checkProperties
 const RLP = ethers.utils.RLP
 
-export type TransactionRequest = {
+export type CPCTransactionRequest = {
   to?: string,
   from?: string,
   nonce?: ethers.BigNumberish,

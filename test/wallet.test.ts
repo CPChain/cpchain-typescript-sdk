@@ -30,11 +30,11 @@ describe('Wallets', () => {
     // ${address} have been got 100 CPC from faucet on CPChain Testnet
     const provider = createJsonRpcProvider('https://civilian.testnet.cpchain.io')
     const transaction = {
-      type: 0,
       to: address,
+      from: address,
       value: utils.parseCPC('1'),
       nonce: await provider.getTransactionCount(address),
-      gas: 300000,
+      gasLimit: 300000,
       gasPrice: await provider.getGasPrice(),
       chainId: 41
     }

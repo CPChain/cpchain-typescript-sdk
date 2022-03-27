@@ -1,5 +1,5 @@
 import { ethers } from 'ethers'
-import { serializeCPC, UnsignedCPCTransaction, TransactionRequest } from './tx'
+import { serializeCPC, UnsignedCPCTransaction, CPCTransactionRequest } from './tx'
 import { version } from '../_vertion'
 const logger = new ethers.utils.Logger(version)
 
@@ -24,11 +24,24 @@ export class CPCWallet {
     return this.wallet.encrypt(password)
   }
 
-  private resolveTx (transaction: TransactionRequest): Promise<UnsignedCPCTransaction> {
-    return resolveProperties(transaction).then((tx) => {
+  private resolveTx (transaction: ethers.providers.TransactionRequest): Promise<UnsignedCPCTransaction> {
+    const _tx: CPCTransactionRequest = {
+      to: transaction.to,
+      from: transaction.from,
+      nonce: transaction.nonce,
+
+      gas: transaction.gasLimit,
+      gasPrice: transaction.gasPrice,
+
+      input: transaction.data,
+      value: transaction.value,
+      chainId: transaction.chainId,
+      type: 0
+    }
+    return resolveProperties(_tx).then((tx) => {
       if (tx.from != null) {
         if (getAddress(tx.from) !== this.address) {
-          logger.throwArgumentError('transaction from address mismatch', 'transaction.from', transaction.from)
+          logger.throwArgumentError('transaction from address mismatch', 'transaction.from', tx.from)
         }
         delete tx.from
       }
@@ -37,13 +50,7 @@ export class CPCWallet {
     })
   }
 
-  hashTrasaction (transaction: TransactionRequest): Promise<String> {
-    return this.resolveTx(transaction).then(tx => {
-      return keccak256(serializeCPC(tx))
-    })
-  }
-
-  signTransaction (transaction: TransactionRequest): Promise<string> {
+  signTransaction (transaction: ethers.providers.TransactionRequest): Promise<string> {
     return this.resolveTx(transaction).then(tx => {
       const signature = this.wallet._signingKey().signDigest(keccak256(serializeCPC(<UnsignedCPCTransaction>tx)))
       return serializeCPC(<UnsignedCPCTransaction>tx, signature)
