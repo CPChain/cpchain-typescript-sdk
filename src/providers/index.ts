@@ -1,7 +1,7 @@
-import { ethers } from 'ethers'
+import { BytesLike, ethers } from 'ethers'
 import fetch from 'cross-fetch'
 
-class CPCTransactionResponse implements ethers.providers.TransactionResponse {
+export class CPCTransactionResponse implements ethers.providers.TransactionResponse {
   hash: string
   provider: ethers.providers.Provider
   blockNumber?: number | undefined
@@ -25,12 +25,12 @@ class CPCTransactionResponse implements ethers.providers.TransactionResponse {
   maxPriorityFeePerGas?: ethers.BigNumber | undefined
   maxFeePerGas?: ethers.BigNumber | undefined
 
-  constructor (hash: string, provider: ethers.providers.Provider) {
+  constructor (hash: string, provider: ethers.providers.Provider, nonce?: number, from?: string) {
     this.hash = hash
     this.provider = provider
     this.confirmations = 3
-    this.from = ''
-    this.nonce = 0
+    this.from = from || ''
+    this.nonce = nonce || 0
     this.gasLimit = ethers.BigNumber.from(0)
     this.data = ''
     this.value = ethers.BigNumber.from(0)
@@ -65,6 +65,55 @@ const networks = [
   }
 ]
 
+function handleNumber (value: string): ethers.BigNumber {
+  if (value === '0x') { return ethers.constants.Zero }
+  return ethers.BigNumber.from(value)
+}
+
+function _parseNonce (rawTransaction: ethers.BytesLike): {
+  nonce: number,
+  from: string
+} {
+  const payload = ethers.utils.arrayify(rawTransaction)
+  const transaction = ethers.utils.RLP.decode(payload)
+
+  // from
+  let chainId = 0
+  let fromAddr = ''
+  let v = ethers.BigNumber.from(transaction[7]).toNumber()
+  const r = ethers.utils.hexZeroPad(transaction[8], 32)
+  const s = ethers.utils.hexZeroPad(transaction[9], 32)
+
+  if (ethers.BigNumber.from(r).isZero() && ethers.BigNumber.from(s).isZero()) {
+    // EIP-155 unsigned transaction
+    chainId = v
+    v = 0
+  } else {
+    // Signed Transaction
+    chainId = Math.floor((v - 35) / 2)
+    if (chainId < 0) { chainId = 0 }
+
+    let recoveryParam = v - 27
+
+    const raw = transaction.slice(0, 7)
+
+    if (chainId !== 0) {
+      raw.push(ethers.utils.hexlify(chainId))
+      raw.push('0x')
+      raw.push('0x')
+      recoveryParam -= chainId * 2 + 8
+    }
+
+    const digest = ethers.utils.keccak256(ethers.utils.RLP.encode(raw))
+    fromAddr = ethers.utils.recoverAddress(digest, { r: ethers.utils.hexlify(r), s: ethers.utils.hexlify(s), recoveryParam: recoveryParam })
+  }
+
+  return {
+    nonce: handleNumber(transaction[1]).toNumber(),
+    from: fromAddr
+  }
+}
+
 class CPCJsonRpcProvider extends ethers.providers.JsonRpcProvider {
   private _url: string
 
@@ -87,6 +136,7 @@ class CPCJsonRpcProvider extends ethers.providers.JsonRpcProvider {
   }
 
   sendTransaction (signedTransaction: string | Promise<string>): Promise<ethers.providers.TransactionResponse> {
+    const tx = _parseNonce(<BytesLike>signedTransaction)
     return fetch(this._url, {
       method: 'POST',
       headers: { 'Content-type': 'application/json;charset=UTF-8' },
@@ -96,7 +146,7 @@ class CPCJsonRpcProvider extends ethers.providers.JsonRpcProvider {
       if ((<RPCError>res).error) {
         throw new Error((<RPCError>res).error.message)
       }
-      return <ethers.providers.TransactionResponse>(new CPCTransactionResponse((<RPCResult>(res)).result, this))
+      return <ethers.providers.TransactionResponse>(new CPCTransactionResponse((<RPCResult>(res)).result, this, tx.nonce, tx.from))
     })
   }
 }

@@ -9,10 +9,12 @@ const keccak256 = ethers.utils.keccak256
 
 export const defaultPath = "m/44'/337'/0'/0/0"
 
-export class CPCWallet {
+export class CPCWallet extends ethers.Signer {
   private wallet: ethers.Wallet
+  private _provider?: ethers.providers.Provider
 
   constructor (wallet: ethers.Wallet) {
+    super()
     this.wallet = wallet
   }
 
@@ -20,8 +22,22 @@ export class CPCWallet {
     return this.wallet.address
   }
 
+  getAddress (): Promise<string> {
+    return Promise.resolve(this.wallet.address)
+  }
+
+  signMessage (message: string | ethers.utils.Bytes): Promise<string> {
+    throw new Error('Method not implemented.')
+  }
+
   encrypt (password: string) {
     return this.wallet.encrypt(password)
+  }
+
+  connect (provider: ethers.providers.Provider): CPCWallet {
+    ethers.utils.defineReadOnly(this, 'provider', provider || null)
+    this._provider = provider
+    return this
   }
 
   private resolveTx (transaction: ethers.providers.TransactionRequest): Promise<UnsignedCPCTransaction> {
