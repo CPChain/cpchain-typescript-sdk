@@ -10,7 +10,9 @@
         "lint": "eslint --ignore-path .eslintignore --ext .js,.ts .",
         "lint:fix": "eslint --fix --ignore-path .eslintignore --ext .js,.ts .",
         "test": "mocha",
-        "build": "webpack"
+        "build": "webpack",
+        "cloc": "gocloc --not-match-d=\"node_modules|lib|dist|test\" .",
+        "cloc:test": "gocloc --not-match-d=\"node_modules|lib|dist\" test"
     },
     "repository": {
         "type": "git",
