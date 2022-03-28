@@ -22,7 +22,15 @@ describe('Wallets', () => {
     const exampleContractFactory = new contract.ContractFactory(abi, bytecode, account)
 
     const exampleContract = await exampleContractFactory.deploy()
+    expect(exampleContract.address).to.be.a('string').length.greaterThan(0)
 
-    console.log(exampleContract.address)
-  }).timeout(20000)
+    // call view methods
+    expect(await exampleContract.greet()).to.be.a('string').equal('Hello, world')
+
+    // call payable methods
+    const tx = await exampleContract.modify('cpchain')
+    expect(tx.hash).to.be.a('string').length.greaterThan(0)
+    await tx.wait()
+    expect(await exampleContract.greet()).to.be.a('string').equal('Hello, cpchain')
+  }).timeout(100000)
 })
