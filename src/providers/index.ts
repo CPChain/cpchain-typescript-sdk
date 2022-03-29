@@ -156,5 +156,6 @@ function createJsonRpcProvider (url: string = 'https://civilian.cpchain.io', cha
 }
 
 export {
+  CPCJsonRpcProvider,
   createJsonRpcProvider
 }
