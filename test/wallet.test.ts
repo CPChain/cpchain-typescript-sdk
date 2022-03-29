@@ -18,7 +18,7 @@ describe('Wallets', () => {
     const password = '123456'
     const encryptedJson = await wallet.encrypt(password)
 
-    const wallet2 = await wallets.fromEcryptedJsonSync(encryptedJson, password)
+    const wallet2 = await wallets.fromEncryptedJsonSync(encryptedJson, password)
     expect(wallet2.address).to.be.a('string').equal(address)
   }).timeout(10000)
   it('createWallet', () => {
