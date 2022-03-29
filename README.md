@@ -127,6 +127,115 @@ console.log(utils.formatCPC(balance))
 
 ```
 
+### Contracts
+
+We wrote a test contract, please check it at **fixtures/contracts/example**. Below is the code of the example contract:
+
+```solidity
+
+pragma solidity ^0.4.24;
+
+contract Example {
+    event ModifyName(string name, uint256 blockNumber);
+    string name;
+    address owner;
+
+    constructor() public {
+        name = "world";
+        owner = msg.sender;
+    }
+
+    modifier onlyOwner {
+        require(msg.sender == owner);
+        _;
+    }
+
+    function greet() public view returns (string) {
+        return string(abi.encodePacked("Hello, ", name));
+    }
+
+    function modify(string newName) public payable {
+        name = newName;
+        emit ModifyName(name, block.number);
+    }
+
+    function collectBack() onlyOwner public {
+        msg.sender.transfer(address(this).balance);
+    }
+}
+
+```
+
+*Note: If you want to develop smart contract on CPChain, please use this tool to help you create project: [cpchain-cli](https://github.com/cpchain/cpchain-cli).*
+
+#### Deploy Contracts
+
+```typescript
+
+// const wallet = ...
+// const provider = ...
+
+const account = wallet.connect(provider)
+
+const bytecode = fs.readFileSync('fixtures/contracts/example/Example_sol_Example.bin').toString()
+const abi = JSON.parse(fs.readFileSync('fixtures/contracts/example/Example_sol_Example.abi').toString())
+
+const exampleContractFactory = new contract.ContractFactory(abi, bytecode, account)
+
+const exampleContract = await exampleContractFactory.deploy()
+
+console.log(exampleContract.address)
+
+```
+
+#### Call Methods
+
+```typescript
+
+// call view methods
+console.log(await exampleContract.greet())
+// output: hello, world!
+
+// call payable methods
+const tx = await exampleContract.modify('cpchain')
+
+await tx.wait()
+
+console.log(await exampleContract.greet())
+// output: hello, cpchain!
+
+// call payable methods with sending CPC
+const tx2 = await exampleContract.modify('cpchain', {
+    value: utils.parseCPC('1')
+})
+await tx2.wait()
+console.log(await getBalance(provider, exampleContract.address))
+
+// collect CPC back to sender
+await (await exampleContract.collectBack()).wait()
+console.log(await getBalance(provider, exampleContract.address))
+
+```
+
+#### Listen and Query Events
+
+```typescript
+
+// listen events
+exampleContract.on('ModifyName', (name: string, blockNumber: any, event: any) => {
+    console.log(name, blockNumber, event)
+})
+
+// get history events
+const filterFrom = exampleContract.filters.ModifyName()
+const currentBlock = await provider.getBlockNumber()
+const historicalEvents = await exampleContract.queryFilter(filterFrom, currentBlock - 10, currentBlock)
+
+console.log(historicalEvents)
+
+
+```
+
 ### Utils
 
 ```typescript
