@@ -1,6 +1,6 @@
-import ethers from 'ethers'
+import { Contract, ContractFactory } from '@ethersproject/contracts'
 
 export default {
-  Contract: ethers.Contract,
-  ContractFactory: ethers.ContractFactory
+  Contract: Contract,
+  ContractFactory: ContractFactory
 }
