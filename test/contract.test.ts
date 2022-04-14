@@ -10,7 +10,7 @@ async function getBalance (provider: CPCJsonRpcProvider, address: string): Promi
   return utils.formatCPC(await provider.getBalance(address))
 }
 
-describe('Wallets', () => {
+describe('Contract', () => {
   // generate by cpc-wallet and got 100 CPC from test.cpchain.io/faucet
   const mnemonic = 'uniform hole fabric shock potato such rough provide nasty second dirt waste'
   const address = '0x1833844Cd9057BBE4987D10d84Dd87883eBA7Cad'
