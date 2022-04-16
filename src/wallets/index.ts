@@ -26,6 +26,10 @@ export class CPCWallet extends ethers.Signer {
     return this.wallet.mnemonic
   }
 
+  get privateKey (): string {
+    return this.wallet.privateKey
+  }
+
   getAddress (): Promise<string> {
     return Promise.resolve(this.wallet.address)
   }
