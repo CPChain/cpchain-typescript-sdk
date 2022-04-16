@@ -22,6 +22,10 @@ export class CPCWallet extends ethers.Signer {
     return this.wallet.address
   }
 
+  get mnemonic (): ethers.utils.Mnemonic {
+    return this.wallet.mnemonic
+  }
+
   getAddress (): Promise<string> {
     return Promise.resolve(this.wallet.address)
   }
@@ -75,7 +79,13 @@ export class CPCWallet extends ethers.Signer {
 }
 
 export default {
-  createWallet (privateKey?: string, provider?: ethers.providers.Provider): CPCWallet {
+  createWallet (path: string | null = defaultPath): CPCWallet {
+    const wallet = ethers.Wallet.createRandom({
+      path: path
+    })
+    return new CPCWallet(wallet)
+  },
+  createByPrivateKey (privateKey?: string, provider?: ethers.providers.Provider): CPCWallet {
     if (!privateKey) {
       privateKey = ethers.Wallet.createRandom().privateKey
     }

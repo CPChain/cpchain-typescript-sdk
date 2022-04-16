@@ -1,6 +1,6 @@
 {
     "name": "cpchain-typescript-sdk",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "description": "The SDK for developing on CPChain with TypeScript(JavaScript)",
     "main": "lib/src/index.js",
     "types": "lib/src/index.d.ts",
@@ -9,7 +9,7 @@
         "compile": "tsc --declaration",
         "lint": "eslint --ignore-path .eslintignore --ext .js,.ts .",
         "lint:fix": "eslint --fix --ignore-path .eslintignore --ext .js,.ts .",
-        "test": "mocha",
+        "test": "TS_NODE_PROJECT=./tsconfig.test.json mocha",
         "build": "npm run compile && webpack",
         "cloc": "gocloc --not-match-d=\"node_modules|lib|dist|test\" .",
         "cloc:test": "gocloc --not-match-d=\"node_modules|lib|dist\" test"
