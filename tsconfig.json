@@ -1,11 +1,10 @@
 {
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig.json to read more about this file */
-
     "outDir": "./lib",
     "rootDir": ".",
-    "target": "es6",
-    "module": "esnext",
+    "target": "es5",
+    "module": "commonjs",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
