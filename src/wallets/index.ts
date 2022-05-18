@@ -83,6 +83,7 @@ export class CPCWallet extends ethers.Signer {
 }
 
 export default {
+  CPCWallet,
   createWallet (path: string | null = defaultPath): CPCWallet {
     const wallet = ethers.Wallet.createRandom({
       path: path
