@@ -3,3 +3,5 @@ dist
 lib
 package-lock.json
 dist-node
+es5
+es6
