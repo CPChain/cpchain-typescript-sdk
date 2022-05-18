@@ -1,6 +1,6 @@
 {
     "name": "cpchain-typescript-sdk",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "description": "The SDK for developing on CPChain with TypeScript(JavaScript)",
     "main": "lib/src/index.js",
     "types": "lib/src/index.d.ts",
