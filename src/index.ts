@@ -7,7 +7,7 @@ export { BigNumber } from 'ethers'
 export { CPCWallet } from './wallets'
 export { CPCJsonRpcProvider } from './providers'
 export { Contract, ContractFactory } from './contract'
-export { uint256, bool, address, uint64, uint8, int8 } from './types'
+export * from './signer'
 
 export interface Receipt {
   to: string
@@ -32,6 +32,8 @@ export interface TxResult{
   hash: string
   wait(): Promise<Receipt>
 }
+
+export * from './types'
 
 export default {
   providers,
