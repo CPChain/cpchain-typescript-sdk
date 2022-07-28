@@ -3,7 +3,7 @@
     /* Visit https://aka.ms/tsconfig.json to read more about this file */
     "outDir": "./dist",
     "rootDir": ".",
-    "target": "es5",
+    "target": "es6",
     "module": "commonjs",
     "strict": true,
     "esModuleInterop": true,
@@ -14,6 +14,6 @@
     "resolveJsonModule": true,
     "declaration": true
   },
-  "include": ["src/**/*", "test/**/*", "node_modules/@types"],
+  "include": ["src/**/*", "node_modules/@types"],
   "exclude": ["node_modules", "dist", "lib"]
 }
