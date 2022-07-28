@@ -1,7 +1,6 @@
 import wallets from '../src/wallets'
 import { createJsonRpcProvider, CPCJsonRpcProvider } from '../src/providers'
 import { expect } from 'chai'
-import { describe, it } from 'mocha'
 import contract from '../src/contract'
 import fs from 'fs'
 import utils from '../src/utils'
@@ -62,5 +61,5 @@ describe('Contract', () => {
     expect(await getBalance(provider, exampleContract.address)).to.be.a('string').equal('0.0')
 
     exampleContract.removeAllListeners()
-  }).timeout(120000)
+  }, 120000)
 })

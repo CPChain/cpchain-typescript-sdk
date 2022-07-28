@@ -1,5 +1,4 @@
 import { expect } from 'chai'
-import { describe, it } from 'mocha'
 import { MockSigner } from '../src'
 import { createJsonRpcProvider } from '../src/providers'
 import utils from '../src/utils'
@@ -38,5 +37,5 @@ describe('Signer test', () => {
     const res = await provider.sendTransaction(rawSignedTx)
     expect(res).to.be.a('object')
     expect(res.hash).to.be.a('string').length.greaterThan(0)
-  }).timeout(10000)
+  }, 10000)
 })

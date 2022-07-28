@@ -1,7 +1,6 @@
 import wallets from '../src/wallets'
 import { createJsonRpcProvider } from '../src/providers'
 import { expect } from 'chai'
-import { describe, it } from 'mocha'
 import utils from '../src/utils'
 
 describe('Wallets', () => {
@@ -20,7 +19,7 @@ describe('Wallets', () => {
 
     const wallet2 = await wallets.fromEncryptedJsonSync(encryptedJson, password)
     expect(wallet2.address).to.be.a('string').equal(address)
-  }).timeout(10000)
+  }, 10000)
   it('createWallet', () => {
     const wallet = wallets.createWallet()
     expect(wallet).to.be.a('object')
@@ -49,5 +48,5 @@ describe('Wallets', () => {
     const receipt = await response.wait()
     expect(receipt).to.be.a('object')
     expect(receipt.status).to.be.a('number').equal(1)
-  }).timeout(200000)
+  }, 200000)
 })
