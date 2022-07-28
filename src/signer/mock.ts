@@ -75,3 +75,13 @@ export class MockSigner implements ISigner {
     })
   }
 }
+
+export class CpcWalletSigner implements ISigner {
+  sign (req: SignRequest): Promise<string> {
+    // 显示密码输入框
+    // 等待用户密码，解密当前钱包
+    // 给交易签名
+    // 返回签名后的交易
+    throw new Error('Method not implemented.')
+  }
+}

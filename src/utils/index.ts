@@ -1,6 +1,7 @@
 import { ethers } from 'ethers'
 
 export default {
+  ...ethers.utils,
   // Wei to CPC
   formatCPC: ethers.utils.formatEther,
   // CPC to Wei
