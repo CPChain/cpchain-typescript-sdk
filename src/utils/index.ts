@@ -1,4 +1,5 @@
 import { ethers } from 'ethers'
+export * from './fetch'
 
 export default {
   ...ethers.utils,

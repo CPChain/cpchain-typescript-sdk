@@ -1,5 +1,7 @@
 import { BytesLike, ethers } from 'ethers'
-import fetch from 'cross-fetch'
+import { xfetch } from '../utils'
+
+export * from './cpc-scan-provider'
 
 export class CPCTransactionResponse implements ethers.providers.TransactionResponse {
   hash: string
@@ -137,7 +139,7 @@ class CPCJsonRpcProvider extends ethers.providers.JsonRpcProvider {
 
   sendTransaction (signedTransaction: string | Promise<string>): Promise<ethers.providers.TransactionResponse> {
     const tx = _parseNonce(<BytesLike>signedTransaction)
-    return fetch(this._url, {
+    return xfetch(this._url, {
       method: 'POST',
       headers: { 'Content-type': 'application/json;charset=UTF-8' },
       body: `{"jsonrpc":"2.0","method":"eth_sendRawTransaction","params":["${signedTransaction}"],"id":1}`
