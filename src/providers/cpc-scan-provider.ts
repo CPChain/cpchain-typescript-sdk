@@ -21,6 +21,7 @@ export interface TransactionResult {
 export type GetHistoryProps = {
   limit?: number // default 20
   page?: number // initial is 1
+  others?: {[key: string]: unknown}
 }
 
 export interface CPCScanProvider {
@@ -71,11 +72,13 @@ export class CPCScanProviderImpl implements CPCScanProvider {
   async getHistory (addressOrName: string | Promise<string>, props?: GetHistoryProps): Promise<ListResults<TransactionResult>> {
     const limit = (props?.limit || 20)
     const page = props?.page === undefined ? 1 : props.page
-    const response = await xfetch(this.getUrl('/chain/tx/?') + new URLSearchParams({
+    const params = new URLSearchParams({
       address: addressOrName as string,
       limit: '' + limit,
-      page: '' + page
-    }))
+      page: '' + page,
+      ...(props?.others || {})
+    })
+    const response = await xfetch(this.getUrl('/chain/tx/?') + params)
     const res = await response.json()
     return res as any
   }
