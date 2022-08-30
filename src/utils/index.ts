@@ -1,5 +1,6 @@
 import { ethers } from 'ethers'
 export * from './fetch'
+export * from './utils'
 
 export function toChecksumAddress (address: string): string {
   if (!ethers.utils.isHexString(address, 20)) {
