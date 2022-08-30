@@ -9,7 +9,18 @@ export type SignRequest = {
   data: string
 }
 
+/**
+ * @deprecated since 0.0.31, replace by Signer
+ */
 export interface ISigner {
+  /**
+   * Sign a transaction.
+   * @param req sign request
+   */
+  sign(req: SignRequest): Promise<SignedTransaction>
+}
+
+export interface Signer {
   /**
    * Sign a transaction.
    * @param req sign request

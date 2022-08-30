@@ -1,13 +1,13 @@
 import { CPCJsonRpcProvider } from '../providers'
 import wallets, { CPCWallet } from '../wallets'
-import { ISigner, SignedTransaction, SignRequest } from './signer'
+import { ISigner, SignedTransaction, Signer, SignRequest } from './signer'
 
 export type PasswordGetter = (() => Promise<string>) | string
 
 /**
  * @description Mock signer for testing, you can specify a function for password to mock the password input.
  */
-export class MockSigner implements ISigner {
+export class MockSigner implements ISigner, Signer {
   private keystore: string
   private provider: CPCJsonRpcProvider
   private gasLimit = 300000

@@ -107,8 +107,8 @@ export default {
       return new CPCWallet(wallet)
     })
   },
-  async fromEncryptedJsonSync (json: string, password: string): Promise<CPCWallet> {
-    return new CPCWallet(await ethers.Wallet.fromEncryptedJsonSync(json, password))
+  fromEncryptedJsonSync (json: string, password: string): CPCWallet {
+    return new CPCWallet(ethers.Wallet.fromEncryptedJsonSync(json, password))
   }
 
 }
