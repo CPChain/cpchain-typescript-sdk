@@ -1,44 +1,45 @@
-import { SignedTransaction, Signer } from '../signer'
+import { TransactionResponse } from '../providers'
+import { Signer } from '../signer'
 import { address, uint256, uint8 } from '../types'
 
 export interface Erc20Token {
   /**
    * Token name, e.g. CPChain
    */
-  name (): string
+  name (): Promise<string>
 
   /**
    * Token symbol, e.g. CPC
    */
-  symbol (): string
+  symbol (): Promise<string>
 
   /**
    * Returns the decimals places of the token.
    */
-  decimals (): uint8
+  decimals (): Promise<uint8>
 
   /**
    * Get owner
    */
-  owner (): address
+  owner (): Promise<address>
 
   /**
    * Returns the amount of tokens in existence.
    */
-  totalSupply (): uint256
+  totalSupply (): Promise<uint256>
 
   /**
    * Get balance of an account
    * @param address Account
    */
-  balanceOf (account: address): uint256
+  balanceOf (account: address): Promise<uint256>
 
   /**
    * Moves `amount` tokens from the caller's account to `to`.
    *
    * Returns a boolean value indicating whether the operation succeeded.
    */
-  transfer (signer: Signer, to: address, amount: uint256): SignedTransaction
+  transfer (signer: Signer, to: address, amount: uint256): Promise<TransactionResponse>
 
   /**
    * Returns the remaining number of tokens that `spender` will be
@@ -47,7 +48,7 @@ export interface Erc20Token {
    *
    * This value changes when {approve} or {transferFrom} are called.
    */
-  allowance (owner: address, spender: address): uint256
+  allowance (owner: address, spender: address): Promise<uint256>
 
   /**
    * Sets `amount` as the allowance of `spender` over the caller's tokens.
@@ -62,7 +63,7 @@ export interface Erc20Token {
    * https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729
    *
    */
-  approve (signer: Signer, spender: address, amount: uint256): void
+  approve (signer: Signer, spender: address, amount: uint256): Promise<void>
 
   /**
    * @dev Moves `amount` tokens from `from` to `to` using the
@@ -72,5 +73,5 @@ export interface Erc20Token {
    * Returns a boolean value indicating whether the operation succeeded.
    *
    */
-  transferFrom (signer: Signer, from: address, to: address, amount: uint256): void
+  transferFrom (signer: Signer, from: address, to: address, amount: uint256): Promise<void>
 }

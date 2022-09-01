@@ -1,7 +1,8 @@
 import { BigNumber, Contract } from 'ethers'
-import { CPCJsonRpcProvider } from '../../providers'
+import { CPCJsonRpcProvider, TransactionResponse } from '../../providers'
 import { Signer } from '../../signer'
-import { address } from '../../types'
+import { address, uint256 } from '../../types'
+import { simpleEncode } from '../../utils/abi'
 import { Erc20Token } from '../types'
 
 export const Erc20Abi = '[{"inputs":[{"name":"name","type":"string"},{"name":"symbol","type":"string"},{"name":"decimals","type":"uint8"},{"name":"initialAmount","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"owner","type":"address"},{"indexed":true,"name":"spender","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"account","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"recipient","type":"address"},{"name":"amount","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"owner","type":"address"},{"name":"spender","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"value","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"sender","type":"address"},{"name":"recipient","type":"address"},{"name":"amount","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"addedValue","type":"uint256"}],"name":"increaseAllowance","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"subtractedValue","type":"uint256"}],"name":"decreaseAllowance","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"}]'
@@ -18,43 +19,49 @@ export class Erc20TokenImpl implements Erc20Token {
     this.contractIns = new Contract(this.contractAddress, Erc20Abi, this.provider)
   }
 
-  transferFrom (signer: Signer, from: string, to: string, amount: BigNumber): void {
+  async name (): Promise<string> {
+    return await this.contractIns.name()
+  }
+
+  async symbol (): Promise<string> {
+    return await this.contractIns.symbol()
+  }
+
+  async decimals (): Promise<number> {
+    return await this.contractIns.decimals()
+  }
+
+  async owner (): Promise<string> {
+    throw await this.contractIns.owner()
+  }
+
+  async totalSupply (): Promise<uint256> {
+    return await this.contractIns.totalSupply()
+  }
+
+  async balanceOf (account: string): Promise<uint256> {
+    return await this.contractIns.balanceOf(account)
+  }
+
+  async transfer (signer: Signer, to: string, amount: BigNumber): Promise<TransactionResponse> {
+    const data = simpleEncode('transfer(address,uint256)', to, amount)
+    const rawTx = await signer.sign({
+      amount: BigNumber.from(0),
+      to: this.contractAddress,
+      data: '0x' + data.toString('hex')
+    })
+    return this.provider.sendTransaction(rawTx)
+  }
+
+  async allowance (owner: string, spender: string): Promise<BigNumber> {
     throw new Error('Method not implemented.')
   }
 
-  name (): string {
-    return this.contractIns.name()
-  }
-
-  symbol (): string {
-    return this.contractIns.symbol()
-  }
-
-  decimals (): number {
-    return this.contractIns.decimals()
-  }
-
-  owner (): string {
-    throw this.contractIns.owner()
-  }
-
-  totalSupply (): BigNumber {
-    return this.contractIns.totalSupply()
-  }
-
-  balanceOf (account: string): BigNumber {
-    return this.contractIns.balanceOf(account)
-  }
-
-  transfer (signer: Signer, to: string, amount: BigNumber): string {
+  async approve (signer: Signer, spender: string, amount: BigNumber): Promise<void> {
     throw new Error('Method not implemented.')
   }
 
-  allowance (owner: string, spender: string): BigNumber {
-    throw new Error('Method not implemented.')
-  }
-
-  approve (signer: Signer, spender: string, amount: BigNumber): void {
+  async transferFrom (signer: Signer, from: string, to: string, amount: BigNumber): Promise<void> {
     throw new Error('Method not implemented.')
   }
 }

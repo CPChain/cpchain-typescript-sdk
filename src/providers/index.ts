@@ -3,7 +3,9 @@ import { xfetch } from '../utils'
 
 export * from './cpc-scan-provider'
 
-export class CPCTransactionResponse implements ethers.providers.TransactionResponse {
+export type TransactionResponse = ethers.providers.TransactionResponse
+
+export class CPCTransactionResponse implements TransactionResponse {
   hash: string
   provider: ethers.providers.Provider
   blockNumber?: number | undefined
@@ -137,7 +139,7 @@ class CPCJsonRpcProvider extends ethers.providers.JsonRpcProvider {
     return Promise.resolve(network)
   }
 
-  sendTransaction (signedTransaction: string | Promise<string>): Promise<ethers.providers.TransactionResponse> {
+  sendTransaction (signedTransaction: string | Promise<string>): Promise<TransactionResponse> {
     const tx = _parseNonce(<BytesLike>signedTransaction)
     return xfetch(this._url, {
       method: 'POST',
@@ -148,7 +150,7 @@ class CPCJsonRpcProvider extends ethers.providers.JsonRpcProvider {
       if ((<RPCError>res).error) {
         throw new Error((<RPCError>res).error.message)
       }
-      return <ethers.providers.TransactionResponse>(new CPCTransactionResponse((<RPCResult>(res)).result, this, tx.nonce, tx.from))
+      return <TransactionResponse>(new CPCTransactionResponse((<RPCResult>(res)).result, this, tx.nonce, tx.from))
     })
   }
 }

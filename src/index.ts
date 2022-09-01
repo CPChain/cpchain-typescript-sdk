@@ -8,6 +8,7 @@ export { CPCWallet } from './wallets'
 export * from './providers'
 export { Contract, ContractFactory } from './contract'
 export * from './signer'
+export * from './utils'
 
 export interface Receipt {
   to: string

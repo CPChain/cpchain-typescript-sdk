@@ -31,7 +31,7 @@ export class MockSigner implements ISigner, Signer {
     if (typeof this.passwordGetter === 'function') {
       pwd = await this.passwordGetter() // 模拟用户输入密码
     }
-    wallets.fromEncryptedJsonSync(this.keystore, pwd as string).then(wallet => {
+    wallets.fromEncryptedJson(this.keystore, pwd as string).then(wallet => {
       cb(wallet)
     })
   }
