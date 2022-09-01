@@ -1,4 +1,6 @@
 
+all: publish
+
 build:
 	@yarn compile
 

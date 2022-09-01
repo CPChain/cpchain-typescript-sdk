@@ -3,12 +3,13 @@ import wallets from './wallets'
 import utils from './utils'
 import contract from './contract'
 import { BigNumber } from 'ethers'
-export { BigNumber } from 'ethers'
+export { BigNumber, BigNumberish } from 'ethers'
 export { CPCWallet } from './wallets'
 export * from './providers'
 export { Contract, ContractFactory } from './contract'
 export * from './signer'
 export * from './utils'
+export * from './dapps'
 
 export interface Receipt {
   to: string
