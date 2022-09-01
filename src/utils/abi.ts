@@ -1,7 +1,7 @@
 // ABI Specification: https://docs.soliditylang.org/en/v0.8.16/abi-spec.html#basic-design
-import { utils } from 'ethers'
+import { BigNumber, utils } from 'ethers'
 import BN from 'bn.js'
-import { fromHexString, isHexPrefixed, setLengthRight, stripHexPrefix, zeros } from './utils'
+import { fromHexString, isHexPrefixed, setLengthRight, stripHexPrefix, toBN, zeros } from './utils'
 
 // Convert from short to canonical names
 // FIXME: optimise or make this nicer?
@@ -266,5 +266,12 @@ export const simpleEncode = (method: string, ...args: unknown[]) => {
   if (args.length !== sig.args.length) {
     throw new Error('Argument count mismatch')
   }
+  // handle args, BigNumber to BN
+  args = args.map(arg => {
+    if ((arg as any)._isBigNumber) {
+      return toBN(arg as BigNumber)
+    }
+    return arg
+  })
   return Buffer.concat([methodID(sig.method, sig.args), rawEncode(sig.args, args)])
 }
