@@ -26,4 +26,14 @@ export interface Signer {
    * @param req sign request
    */
   sign(req: SignRequest): Promise<SignedTransaction>
+
+}
+
+// TODO batchSign移到Singer中，
+export interface WalletSigner extends Signer {
+  /**
+   *
+   * @param requests
+   */
+  batchSign(requests: SignRequest[]): Promise<SignedTransaction[]>
 }
