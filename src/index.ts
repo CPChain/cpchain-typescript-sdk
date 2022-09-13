@@ -3,6 +3,7 @@ import wallets from './wallets'
 import utils from './utils'
 import contract from './contract'
 import { BigNumber } from 'ethers'
+
 export { BigNumber, BigNumberish } from 'ethers'
 export { CPCWallet } from './wallets'
 export * from './providers'

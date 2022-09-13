@@ -1,6 +1,7 @@
 import { ethers } from 'ethers'
 export * from './fetch'
 export * from './utils'
+export * from './rn-ethers'
 
 export function toChecksumAddress (address: string): string {
   if (!ethers.utils.isHexString(address, 20)) {
@@ -24,6 +25,14 @@ export function toChecksumAddress (address: string): string {
   }
 
   return '0x' + chars.join('')
+}
+
+export function zpad (value: any, length: number) {
+  value = String(value)
+  while (value.length < length) {
+    value = '0' + value
+  }
+  return value
 }
 
 export default {
