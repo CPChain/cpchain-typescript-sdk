@@ -1,5 +1,5 @@
 import { Contract } from 'ethers'
-import { CPCWallet, WalletSigner } from '../..'
+import { WalletSigner } from '../..'
 import { CPCJsonRpcProvider, TransactionResponse } from '../../providers'
 import { address } from '../../types'
 import utils from '../../utils'
