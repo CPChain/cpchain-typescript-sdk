@@ -18,4 +18,3 @@ cat > dist/es6/package.json << EOF
   "type": "module"
 }
 EOF
-

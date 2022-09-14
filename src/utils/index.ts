@@ -2,6 +2,7 @@ import { ethers } from 'ethers'
 export * from './fetch'
 export * from './utils'
 export * from './rn-ethers'
+export { default as uuid } from './uuid'
 
 export function toChecksumAddress (address: string): string {
   if (!ethers.utils.isHexString(address, 20)) {

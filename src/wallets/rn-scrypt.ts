@@ -5,15 +5,14 @@
 
 import { ethers } from 'ethers'
 import { arrayify, entropyToMnemonic, getAddress, keccak256, mnemonicToEntropy } from 'ethers/lib/utils'
-import { concatBytes, hexlify, looseArrayify, toUtf8Bytes, UnicodeNormalizationForm, zpad } from '../utils'
+import { concatBytes, hexlify, looseArrayify, toUtf8Bytes, UnicodeNormalizationForm, uuid, zpad } from '../utils'
 import aes from 'aes-js'
 import pbkdf2 from '@ethersproject/pbkdf2'
-import uuid from 'uuid'
 
 let scrypt: any
 
 try {
-  scrypt = require('react-native-scrypt')
+  scrypt = require('react-native-scrypt').default
 } catch (err) {
   // skip
 }
@@ -150,7 +149,7 @@ export function encryptRN (privateKey: any, password: string, options: any, prog
       p = options.scrypt.p
     }
   }
-  return new Promise(function (resolve: any, reject: any) {
+  return new Promise(function (resolve: (privKey: string) => void, reject: any) {
     if (progressCallback) {
       progressCallback(0)
     }
@@ -297,10 +296,9 @@ export function decryptRN (json: string, password: string, progressCallback: any
       }
       signingKey = node
     }
-    // TODO Wallet to CPCWallet
     return signingKey
   }
-  return new Promise(function (resolve, reject) {
+  return new Promise(function (resolve: (w: ethers.Wallet) => void, reject) {
     const kdf = searchPath(data, 'crypto/kdf')
     if (kdf && typeof kdf === 'string') {
       if (kdf.toLowerCase() === 'scrypt') {

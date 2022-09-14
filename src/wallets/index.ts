@@ -39,7 +39,7 @@ export default {
     // This method return an wallet, when use this wallet to encrypt, is also use the Scrypt written in C.
     fromEncryptedJson (json: string, password: string): Promise<CPCWallet> {
       return decryptRN(json, password, null).then((wallet: any) => {
-        return new CPCWallet(wallet)
+        return new CPCWallet(wallet, { isRN: true })
       })
     }
   }
