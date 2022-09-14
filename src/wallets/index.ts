@@ -41,6 +41,24 @@ export default {
       return decryptRN(json, password, null).then((wallet: any) => {
         return new CPCWallet(wallet, { isRN: true })
       })
+    },
+    createWallet (path: string | null = defaultPath): CPCWallet {
+      const wallet = ethers.Wallet.createRandom({
+        path: path
+      })
+      return new CPCWallet(wallet, { isRN: true })
+    },
+    createByPrivateKey (privateKey?: string, provider?: ethers.providers.Provider): CPCWallet {
+      if (!privateKey) {
+        privateKey = ethers.Wallet.createRandom().privateKey
+      }
+      return new CPCWallet(new ethers.Wallet(privateKey, provider), { isRN: true })
+    },
+    fromMnemonic (mnemonic: string, path?: string): CPCWallet {
+      if (!path) {
+        path = defaultPath
+      }
+      return new CPCWallet(ethers.Wallet.fromMnemonic(mnemonic, path), { isRN: true })
     }
   }
 
