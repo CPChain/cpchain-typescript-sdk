@@ -10,6 +10,8 @@ const keccak256 = ethers.utils.keccak256
 
 export const defaultPath = "m/44'/337'/0'/0/0"
 
+export type TransactionRequest = ethers.providers.TransactionRequest
+
 export interface CPCWalletProps {
   isRN?: boolean // 是否为 react-native 环境
 }
@@ -87,10 +89,16 @@ export class CPCWallet extends ethers.Signer {
     })
   }
 
-  signTransaction (transaction: ethers.providers.TransactionRequest): Promise<string> {
+  signTransaction (transaction: TransactionRequest): Promise<string> {
     return this.resolveTx(transaction).then(tx => {
       const signature = this.wallet._signingKey().signDigest(keccak256(serializeCPC(<UnsignedCPCTransaction>tx)))
       return serializeCPC(<UnsignedCPCTransaction>tx, signature)
+    })
+  }
+
+  hash (transaction: TransactionRequest): Promise<string> {
+    return this.resolveTx(transaction).then(tx => {
+      return keccak256(serializeCPC(<UnsignedCPCTransaction>tx))
     })
   }
 }
