@@ -1,36 +1,36 @@
 import { WalletSigner } from '../../signer'
 
-export class NeedRegisterError extends Error {
-  get message (): string {
-    return 'Need Register'
-  }
-}
-
-export class PrivateKeyLostError extends Error {
-  get message (): string {
-    return 'Private key lost'
-  }
-}
-
-export type DappRegistrationV1 = {
-  address: string;
+/**
+ * V1版本上链的数据结构
+ */
+export type IdentityV1 = {
   name: string;
   privateKey: string;
   publicKey: string;
 };
 
-export type ECDHMessage = { iv: string; ciphertext: string; mac?: string };
+export interface IIdentityService {
 
-export interface RegisterService {
+  /**
+   * 创建身份注册的数据结构,生成公私钥
+   */
+  createIdentityV1(options:Partial<IdentityV1>):IdentityV1
+
+  /**
+   * 通过私钥进行导出公钥
+   * @param privateKeyBase64
+   */
+  getPublicKeyV1(privateKeyBase64:string):string
+
   /**
    * 根据地址获取链上注册信息
    * @param address
    */
-  onchainV1(address: string): Promise<DappRegistrationV1 | null>;
+  getIdentityV1(address: string): Promise<IdentityV1 | null>;
 
   /**
-   * 提交注册信息
+   * 提交注册信息(包括修改注册信息)
    * @param dappRegistration
    */
-  registerV1(singer:WalletSigner, dappRegistration: DappRegistrationV1): Promise<DappRegistrationV1>;
+  registerV1(signer: WalletSigner, dappRegistration: IdentityV1): Promise<IdentityV1>;
 }
