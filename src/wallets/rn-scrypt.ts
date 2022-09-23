@@ -7,7 +7,6 @@ import { ethers } from 'ethers'
 import { arrayify, entropyToMnemonic, getAddress, keccak256, mnemonicToEntropy } from 'ethers/lib/utils'
 import { concatBytes, hexlify, looseArrayify, toUtf8Bytes, UnicodeNormalizationForm, uuid, zpad } from '../utils'
 import aes from 'aes-js'
-import pbkdf2 from '@ethersproject/pbkdf2'
 import { ReactNativeAdapter } from './types'
 
 export const defaultPath = "m/44'/337'/0'/0/0"
@@ -358,7 +357,7 @@ export function decryptRN (json: string, password: string, progressCallback: any
           reject(new Error('unsupported key-derivation derived-key length'))
           return
         }
-        const key = pbkdf2.pbkdf2(passwordBytes, salt, c, dkLen, prfFunc)
+        const key = adapter?.pbkdf2(passwordBytes, salt, c, dkLen, prfFunc)
         const signingKey = getSigningKey(key, reject)
         if (!signingKey) {
           return
