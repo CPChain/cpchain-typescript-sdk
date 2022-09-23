@@ -1,6 +1,6 @@
 /**
  * Used for react-native app
- * A wrapper for https://www.npmjs.com/package/react-native-scrypt
+ * A wrapper for react-native scrypt
  */
 
 import { ethers } from 'ethers'
@@ -8,14 +8,7 @@ import { arrayify, entropyToMnemonic, getAddress, keccak256, mnemonicToEntropy }
 import { concatBytes, hexlify, looseArrayify, toUtf8Bytes, UnicodeNormalizationForm, uuid, zpad } from '../utils'
 import aes from 'aes-js'
 import pbkdf2 from '@ethersproject/pbkdf2'
-
-let scrypt: any
-
-try {
-  scrypt = require('react-native-scrypt').default
-} catch (err) {
-  // skip
-}
+import { ReactNativeAdapter } from './types'
 
 export const defaultPath = "m/44'/337'/0'/0/0"
 
@@ -66,7 +59,7 @@ function randomBytes (length: number) {
   return arrayify(result)
 }
 
-export function encryptRN (privateKey: any, password: string, options: any, progressCallback: any) {
+export function encryptRN (privateKey: any, password: string, options: any, progressCallback: any, adapter?: ReactNativeAdapter) {
   // the options are optional, so adjust the call as needed
   if (typeof (options) === 'function' && !progressCallback) {
     progressCallback = options
@@ -162,7 +155,7 @@ export function encryptRN (privateKey: any, password: string, options: any, prog
       saltNew.push(element)
     })
 
-    scrypt(password, saltNew, N, r, p, 64).then((key:any) => {
+    adapter?.scrypt(password, saltNew, N, r, p, 64).then((key:any) => {
       if (key) {
         key = arrayify('0x' + key)
         // This will be used to encrypt the wallet (as per Web3 secret storage)
@@ -233,7 +226,7 @@ export function encryptRN (privateKey: any, password: string, options: any, prog
   })
 }
 
-export function decryptRN (json: string, password: string, progressCallback: any) {
+export function decryptRN (json: string, password: string, progressCallback: any, adapter?: ReactNativeAdapter) {
   const data = JSON.parse(json)
   const passwordBytes = getPassword(password)
   const decrypt = function (key: any, ciphertext: any) {
@@ -332,7 +325,7 @@ export function decryptRN (json: string, password: string, progressCallback: any
           saltNew.push(element)
         })
 
-        scrypt(password, saltNew, N, r, p, 64)
+        adapter?.scrypt(password, saltNew, N, r, p, 64)
           .then((key: any) => {
             if (key) {
               key = arrayify('0x' + key)

@@ -2,6 +2,7 @@ import { ethers } from 'ethers'
 import { serializeCPC, UnsignedCPCTransaction, CPCTransactionRequest } from './tx'
 import { version } from '../_vertion'
 import { encryptRN } from './rn-scrypt'
+import { ReactNativeAdapter } from './types'
 const logger = new ethers.utils.Logger(version)
 
 const getAddress = ethers.utils.getAddress
@@ -14,6 +15,7 @@ export type TransactionRequest = ethers.providers.TransactionRequest
 
 export interface CPCWalletProps {
   isRN?: boolean // 是否为 react-native 环境
+  rnAdapter?: ReactNativeAdapter
 }
 
 export class CPCWallet extends ethers.Signer {
@@ -52,7 +54,7 @@ export class CPCWallet extends ethers.Signer {
       return encryptRN(this.wallet.privateKey, password, {
         client: 'cpchain-typescript-sdk',
         path: defaultPath
-      }, null)
+      }, null, this.props.rnAdapter)
     }
     return this.wallet.encrypt(password)
   }
