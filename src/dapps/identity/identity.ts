@@ -42,11 +42,14 @@ export class IdentityService implements IIdentityService {
   }
 
   async getIdentityV1 (address: string): Promise<IdentityV1 | null> {
-    const result = await this?.contractIns.get(address)
-    if (result) {
+    try {
+      const result = await this?.contractIns.get(address)
       return JSON.parse(result)
-    } else {
-      return null
+    } catch (_error:any) {
+      /**
+       * 合约设定查询未注册的人会有call revert exception异常，此处封装异常
+       */
+      if (_error.message.includes('call revert exception')) { return null } else throw _error
     }
   }
 
@@ -57,7 +60,7 @@ export class IdentityService implements IIdentityService {
     const signedTransaction = await signer.sign({
       amount: BigNumber.from(0),
       to: this.contractAddress,
-      data: simpleEncode(
+      data: '0x' + simpleEncode(
         'register(string)',
         JSON.stringify({
           pub_key: dappRegistration.publicKey,
