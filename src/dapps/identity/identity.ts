@@ -1,6 +1,7 @@
 import { BigNumber, Contract } from 'ethers'
 import { WalletSigner } from '../..'
-import { Base64, generatePrivate, getPublic } from '../../lib'
+import { Base64 } from '../../lib'
+import { generatePrivate, getPublic } from '@cpchain-tools/ecc'
 import { CPCJsonRpcProvider, TransactionResponse } from '../../providers'
 import { address } from '../../types'
 import { simpleEncode } from '../../utils/abi'

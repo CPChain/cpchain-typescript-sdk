@@ -4,3 +4,4 @@ package-lock.json
 dist-node
 es5
 es6
+yarn-error.log
