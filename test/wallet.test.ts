@@ -20,6 +20,15 @@ describe('Wallets', () => {
     const wallet2 = await wallets.fromEncryptedJsonSync(encryptedJson, password)
     expect(wallet2.address).to.be.a('string').equal(address)
   }, 10000)
+  it('fromPrivateKey', async () => {
+    const privKey = '0x6c0296556144bf09864f0583886867e5cb2eea02206ca7187d998529ff8ef069'
+    const wallet = wallets.createByPrivateKey(privKey)
+    expect(wallet.address).to.equal('0x7de6c6E04Ea0CDc76fD51c6F441C25a7DCA236A0')
+    const wallet2 = wallets.createWallet()
+    console.log(wallet2.address)
+    console.log(wallet2.privateKey)
+    console.log(wallet2.mnemonic.phrase)
+  })
   it('createWallet', () => {
     const wallet = wallets.createWallet()
     expect(wallet).to.be.a('object')
