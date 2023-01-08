@@ -4,6 +4,7 @@ export * from './utils'
 export * from './rn-ethers'
 export { default as uuid } from './uuid'
 export * from './abi'
+export * from './address'
 
 export function toChecksumAddress (address: string): string {
   if (!ethers.utils.isHexString(address, 20)) {
