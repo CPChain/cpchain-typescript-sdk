@@ -3,11 +3,14 @@ import { serializeCPC, UnsignedCPCTransaction, CPCTransactionRequest } from './t
 import { version } from '../_vertion'
 import { encryptRN } from './rn-scrypt'
 import { ReactNativeAdapter } from './types'
+
+export * from './tx'
+
 const logger = new ethers.utils.Logger(version)
 
 const getAddress = ethers.utils.getAddress
 const resolveProperties = ethers.utils.resolveProperties
-const keccak256 = ethers.utils.keccak256
+export const keccak256 = ethers.utils.keccak256
 
 export const defaultPath = "m/44'/337'/0'/0/0"
 
@@ -65,7 +68,7 @@ export class CPCWallet extends ethers.Signer {
     return this
   }
 
-  private resolveTx (transaction: ethers.providers.TransactionRequest): Promise<UnsignedCPCTransaction> {
+  protected resolveTx (transaction: ethers.providers.TransactionRequest): Promise<UnsignedCPCTransaction> {
     const _tx: CPCTransactionRequest = {
       to: transaction.to,
       from: transaction.from,
